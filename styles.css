@@ -1,0 +1,143 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+	background: rgb(252,70,211);
+	background: radial-gradient(circle, rgba(128,128,128,1) 5%, rgba(242,242,242,1) 100%); 
+/*	background-image: url("Images/bg-1.png"); */
+    background-size: cover; /* растягивает изображение, чтобы покрыть весь контейнер */
+    background-repeat: no-repeat; /* отключает повторение изображения */
+    background-position: center; /* центрирует изображение */
+    /* background: linear-gradient(.25turn, red, 10%, blue); */
+	/* #8b27b3, #eb1a90 */
+	overflow-x: hidden;
+}
+
+h1 {
+    text-align: center;
+    padding: 20px;
+    background-color: #222;
+    color: #fff;
+    margin: 0;
+	font-size: 36px;
+}
+
+/* Контейнер портфолио */
+.portfolio-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px; 
+    margin: 0 auto;
+}
+
+/* Контейнер для переворота */
+.portfolio-item-wrapper {
+    perspective: 1000px;
+}
+
+/* Элемент портфолио */
+.portfolio-item {
+    width: 100%;
+    height: 400px; 
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 1s;
+    cursor: pointer;
+	/* border-radius: 15px;
+	 overflow: hidden; Скругляем края и обрезаем выход за рамки */
+}
+
+.portfolio-title {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Внутренний контейнер для переворота */
+.portfolio-item-inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 1s;
+}
+
+/* Передняя сторона карточки */
+.portfolio-item-front,
+.portfolio-item-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
+
+/* Оборотная сторона карточки */
+.portfolio-item-back {
+	background-color: #000; /* #333 */
+    color: #FFF;			/* #f9f9f9 */
+    transform: rotateY(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+	
+}
+
+/* При клике на карточку */
+.portfolio-item.flipped .portfolio-item-inner {
+    transform: rotateY(180deg);
+}
+
+/* Картинка портфолио */
+.portfolio-image {
+    width: 100%;
+    height: 100%; /* auto */
+    object-fit: cover;
+    display: block;
+}
+
+/* Описание портфолио */
+.portfolio-description {
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: 20px;
+	/* -webkit-backdrop-filter: blur(5px);
+	backdrop-filter: blur(5px); */
+}
+
+footer a, .links a{
+    color: #fff;
+    text-decoration: none;
+}
+
+footer a:hover, .links a:hover{
+    text-decoration: underline;
+}
+/*
+.links a{
+	color: #fff;
+	text-decoration: none;
+}
+
+.links a:hover {
+	text-decoration: underline;
+}
+	*/
