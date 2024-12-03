@@ -1,95 +1,107 @@
-function getActiveDesktop() {
-  return document.querySelector('.desktop.active');
-}
+const tabs = document.querySelectorAll('.tab');
+const desktops = document.querySelectorAll('.desktop');
+const draggableElements = document.querySelectorAll('.draggable');
+const desktopWrapper = document.querySelector('.d-wrap');
+let currentZIndex = 10; // Начальный z-index для управления слоями
 
-function setupDraggableElements() {
-  const activeDesktop = getActiveDesktop();
-  if (!activeDesktop) return;
-
-  const draggableElements = activeDesktop.querySelectorAll('.draggable');
-
-  draggableElements.forEach(element => {
-    let isDragging = false;
-    let offsetX, offsetY;
-
-    element.addEventListener('mousedown', (e) => {
-      isDragging = true;
-      offsetX = e.clientX - element.offsetLeft;
-      offsetY = e.clientY - element.offsetTop;
-
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-    });
-
-    function onMouseMove(e) {
-      if (isDragging) {
-        const desktopRect = activeDesktop.getBoundingClientRect();
-
-        let left = e.clientX - offsetX;
-        let top = e.clientY - offsetY;
-
-        // Ограничения перемещения в пределах активного desktop
-        if (left < 0) left = 0;
-        if (top < 0) top = 0;
-        if (left + element.offsetWidth > desktopRect.width) {
-          left = desktopRect.width - element.offsetWidth;
-        }
-        if (top + element.offsetHeight > desktopRect.height) {
-          top = desktopRect.height - element.offsetHeight;
-        }
-
-        element.style.left = `${left}px`;
-        element.style.top = `${top}px`;
-      }
-    }
-
-    function onMouseUp() {
-      isDragging = false;
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    }
-  });
-}
-
-document.querySelectorAll('.tab').forEach(tab => {
+// Переключение вкладок
+tabs.forEach(tab => {
   tab.addEventListener('click', () => {
-    // Удаляем активный класс со всех вкладок
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
+    // Сбросить класс active у всех вкладок и desktop
+    tabs.forEach(t => t.classList.remove('active'));
+    desktops.forEach(d => d.classList.remove('active'));
 
-    // Скрываем все desktop и показываем только активный
-    document.querySelectorAll('.desktop').forEach(desktop => desktop.classList.remove('active'));
-    const target = tab.getAttribute('data-target');
-    const targetElement = document.getElementById(target);
-    if (targetElement) {
-      targetElement.classList.add('active');
+    // Активировать выбранную вкладку и соответствующий desktop
+    const targetId = tab.getAttribute('data-target');
+    const targetDesktop = document.getElementById(targetId);
+
+    if (targetDesktop) {
+      tab.classList.add('active');
+      targetDesktop.classList.add('active');
     }
-
-    // Заново инициализируем draggable элементы для активного desktop
-    setupDraggableElements();
   });
 });
 
-// Инициализация при загрузке страницы
-setupDraggableElements();
+// Перемещение окон и ярлыков
+draggableElements.forEach(element => {
+  let isDragging = false;
+  let offsetX, offsetY;
+
+  element.addEventListener('mousedown', (e) => {
+    e.preventDefault(); // Предотвращает выделение текста
+    isDragging = true;
+    offsetX = e.clientX - element.offsetLeft;
+    offsetY = e.clientY - element.offsetTop;
+
+    // Установить наивысший z-index для текущего элемента
+    currentZIndex++;
+    element.style.zIndex = currentZIndex;
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      document.removeEventListener('mousemove', onMouseMove);
+    });
+  });
+
+  function onMouseMove(e) {
+    if (isDragging) {
+      const desktopRect = desktopWrapper.getBoundingClientRect();
+      let left = e.clientX - offsetX;
+      let top = e.clientY - offsetY;
+
+      // Ограничения для перемещения в пределах области
+      if (left < 0) left = 0;
+      if (top < 0) top = 0;
+      if (left + element.offsetWidth > desktopRect.width) left = desktopRect.width - element.offsetWidth;
+      if (top + element.offsetHeight > desktopRect.height) top = desktopRect.height - element.offsetHeight;
+
+      element.style.left = `${left}px`;
+      element.style.top = `${top}px`;
+    }
+  }
+});
+
+// Запрет перетаскивания изображений
+document.addEventListener('dragstart', (event) => {
+  if (event.target.tagName === 'IMG') {
+    event.preventDefault();
+  }
+});
 
 // Адаптация окон при изменении размера окна браузера
 window.addEventListener('resize', () => {
-  const activeDesktop = getActiveDesktop();
-  if (!activeDesktop) return;
-
-  const draggableElements = activeDesktop.querySelectorAll('.draggable');
-
   draggableElements.forEach(element => {
-    const desktopRect = activeDesktop.getBoundingClientRect();
+    const desktopRect = desktopWrapper.getBoundingClientRect();
     const elementRect = element.getBoundingClientRect();
 
     // Перемещение окна внутрь видимой области
     if (elementRect.right > desktopRect.width) {
-      element.style.left = `${desktopRect.width - element.offsetWidth}px`;
+      element.style.left = `${desktopRect.width - elementRect.width}px`;
     }
     if (elementRect.bottom > desktopRect.height) {
-      element.style.top = `${desktopRect.height - element.offsetHeight}px`;
+      element.style.top = `${desktopRect.height - elementRect.height}px`;
     }
+  });
+});
+
+// Управление кликами на ссылках
+const links = document.querySelectorAll('a');
+
+links.forEach(link => {
+  let singleClickTimeout;
+  // link.target = '_blank';
+  link.addEventListener('click', (e) => {
+    e.preventDefault(); // Блокируем переход по одинарному клику
+    clearTimeout(singleClickTimeout);
+    singleClickTimeout = setTimeout(() => {
+      // Одинарный клик - ничего не делаем
+    }, 300);
+  });
+
+  link.addEventListener('dblclick', (e) => {
+    e.preventDefault();
+    clearTimeout(singleClickTimeout);
+    window.open(link.href, link.target || '_blank'); // Переход по ссылке
   });
 });

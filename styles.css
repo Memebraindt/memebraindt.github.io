@@ -1,7 +1,15 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: Consolas;
   margin: 0;
   overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none; 
+  -ms-user-select: none;
+}
+
+img {
+  pointer-events: none; 
+  user-drag: none;
 }
 
 .top-bar {
@@ -24,11 +32,25 @@ body {
   cursor: pointer;
   transition: 0.2s;
   border: 1px solid transparent;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* padding: 10px; */
+  cursor: pointer;
+  text-align: center;
 }
 
 .tab.active {
   background: #ddd;
   border: 1px solid #bbb;
+}
+
+.tab img.tab-preview {
+  width: 96px;
+  height: 54px;
+  margin-bottom: 5px;
+  border-radius: 5px; /* Можно убрать, если не нужен закруглённый край */
 }
 
 .desktop {
