@@ -2,6 +2,10 @@ const tabs = document.querySelectorAll('.tab');
 const desktops = document.querySelectorAll('.desktop');
 const draggableElements = document.querySelectorAll('.draggable');
 const desktopWrapper = document.querySelector('.d-wrap');
+const tabsWrapper = document.querySelector('.tabs-wrapper');
+const tabsContainer = document.querySelector('.tabs');
+const leftArrow = document.querySelector('.left-arrow');
+const rightArrow = document.querySelector('.right-arrow');
 let currentZIndex = 10; // Начальный z-index для управления слоями
 
 // Переключение вкладок
@@ -21,6 +25,31 @@ tabs.forEach(tab => {
     }
   });
 });
+
+// Горизонтальная прокрутка вкладок
+let scrollPosition = 0;
+
+const updateArrowState = () => {
+  const maxScroll = tabsContainer.scrollWidth - tabsWrapper.offsetWidth;
+  leftArrow.disabled = scrollPosition <= 0;
+  rightArrow.disabled = scrollPosition >= maxScroll;
+};
+
+const scrollTabs = (direction) => {
+  const tabWidth = 202; // 192px + 10px (gap)
+  const maxScroll = tabsContainer.scrollWidth - tabsWrapper.offsetWidth;
+
+  scrollPosition += direction * tabWidth;
+  scrollPosition = Math.max(0, Math.min(scrollPosition, maxScroll));
+
+  tabsContainer.style.transform = `translateX(-${scrollPosition}px)`;
+  updateArrowState();
+};
+
+leftArrow.addEventListener('click', () => scrollTabs(-1));
+rightArrow.addEventListener('click', () => scrollTabs(1));
+
+updateArrowState();
 
 // Перемещение окон и ярлыков
 draggableElements.forEach(element => {
@@ -83,6 +112,9 @@ window.addEventListener('resize', () => {
       element.style.top = `${desktopRect.height - elementRect.height}px`;
     }
   });
+
+  // Обновление состояния стрелок после изменения размера
+  updateArrowState();
 });
 
 // Управление кликами на ссылках

@@ -1,5 +1,5 @@
 body {
-  font-family: Consolas;
+  font-family: Consolas, sans-serif;
   margin: 0;
   overflow: hidden;
   user-select: none;
@@ -13,11 +13,200 @@ img {
 }
 
 .top-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
   background: #e0e0e0;
   padding: 10px;
-  display: flex;
-  justify-content: center;
   border-bottom: 2px solid #ccc;
+}
+
+.tabs-wrapper {
+  overflow: hidden;
+  flex: 1;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  transition: transform 0.3s ease;
+}
+
+.tab {
+  flex-shrink: 0;
+  width: 192px; /* Фиксированная ширина */
+  height: 108px; /* Фиксированная высота */
+}
+
+.tab:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.tab.active {
+  background: #ddd;
+  border: 1px solid #bbb;
+}
+
+.tab-image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.tab-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.tab-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  text-align: center;
+  font-size: 14px;
+  padding: 5px 0;
+  box-sizing: border-box;
+  font-family: Consolas, sans-serif;
+}
+
+.arrow {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: background 0.2s;
+  height: 108px;
+}
+
+.arrow:hover {
+  background: #ddd;
+}
+
+.left-arrow {
+  margin-right: 10px;
+}
+
+.right-arrow {
+  margin-left: 10px;
+}
+
+.desktop {
+  background: #89c7ff;
+  display: none;
+  width: 100%;
+  height: calc(100vh - 50px);
+  position: relative;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.desktop.active {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.icon {
+  position: absolute;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+  width: 80px;
+  z-index: 5;
+}
+
+.icon-image {
+  font-size: 64px;
+  background: rgba(255, 255, 255, 0.0);
+  padding: 0px;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.icon:hover .icon-image {
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.icon-label {
+  margin-top: 5px;
+  font-size: 14px;
+  word-wrap: break-word;
+}
+
+.window {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  position: absolute;
+  width: 300px;
+  height: 200px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.window-header {
+  background: #f0f0f0;
+  padding: 10px;
+  cursor: move;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.circle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.red {
+  background: #ff5f57;
+}
+
+.yellow {
+  background: #ffbd2e;
+}
+
+.green {
+  background: #27c93f;
+}
+
+.window-content {
+  padding: 10px;
+}
+
+
+/* body {
+  font-family: Consolas;
+  margin: 0;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none; 
+  -ms-user-select: none;
+}
+
+img {
+  pointer-events: none; 
+  user-drag: none;
 }
 
 .tabs {
@@ -26,19 +215,31 @@ img {
 }
 
 .tab {
+  width: 192px;
+  height: 108px;
+  position: relative;
+  border-radius: 5px;
+  overflow: hidden;
   background: #fff;
+  cursor: pointer;
+  transition: 0.2s;
+  border: 1px solid #ccc;
+  /* background: #fff;
   padding: 5px 15px;
   border-radius: 5px;
   cursor: pointer;
   transition: 0.2s;
   border: 1px solid transparent;
-
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* padding: 10px; */
   cursor: pointer;
-  text-align: center;
+  text-align: center; 
+}
+
+.tab:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .tab.active {
@@ -46,11 +247,20 @@ img {
   border: 1px solid #bbb;
 }
 
+.top-bar {
+  background: #e0e0e0;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  border-bottom: 2px solid #ccc;
+}
+
+
 .tab img.tab-preview {
   width: 96px;
   height: 54px;
   margin-bottom: 5px;
-  border-radius: 5px; /* Можно убрать, если не нужен закруглённый край */
+  border-radius: 5px; /* Можно убрать, если не нужен закруглённый край 
 }
 
 .desktop {
@@ -149,4 +359,4 @@ img {
 
 .window-content {
   padding: 10px;
-}
+} */
