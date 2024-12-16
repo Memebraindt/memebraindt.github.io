@@ -11,6 +11,7 @@ const links = document.querySelectorAll('a');
 
 let currentZIndex = 10; 
 let scrollPosition = 0;
+let isRandom = false; // Состояние: false - упорядоченное, true - случайное
 
 const updateArrowState = () => {
   const tabsWrapperWidth = tabsWrapper.offsetWidth;
@@ -20,7 +21,7 @@ const updateArrowState = () => {
 
   leftArrow.style.display = scrollPosition > 0 ? 'block' : 'none';
   rightArrow.style.display = scrollPosition < maxScroll ? 'block' : 'none';
-}
+};
 
 const scrollTabs = (direction) => {
   const tabWidth = 202; // 192px + 10px (gap)
@@ -48,10 +49,53 @@ const updateTabsLayout = () => {
   } else {
     updateArrowState();
     tabsWrapper.style.transform = `translateX(0px)`;
-    // tabsContainer.style.transform = `translateX(0px)`;
-    // scrollPosition -= windowWidth - (1628 - scrollPosition);
-    // tabsContainer.style.transform = `translateX(${-scrollPosition}px)`;
   }
+};
+
+const randomizeWindows = (desktop) => {
+    const windows = desktop.querySelectorAll('.window');
+    windows.forEach(window => {
+        const maxX = desktop.offsetWidth - window.offsetWidth;
+        const maxY = desktop.offsetHeight - window.offsetHeight;
+
+        const randomX = Math.floor(Math.random() * maxX);
+        const randomY = Math.floor(Math.random() * maxY);
+
+        window.style.transition = 'all 1.5s ease';
+        window.style.left = `${randomX}px`;
+        window.style.top = `${randomY}px`;
+    });
+};
+
+const organizeWindows = (desktop) => {
+    const windows = desktop.querySelectorAll('.window');
+    let x = 20;
+    let y = 20;
+    const padding = 20; // Отступ между окнами
+
+    windows.forEach((window) => {
+        const windowWidth = window.offsetWidth;
+        const windowHeight = window.offsetHeight;
+
+        window.style.transition = 'all 1.5s ease';
+        window.style.left = `${x}px`;
+        window.style.top = `${y}px`;
+
+        x += windowWidth + padding;
+        if (x + windowWidth > desktop.offsetWidth) {
+            x = 20;
+            y += windowHeight + padding;
+        }
+    });
+};
+
+const toggleWindowState = (desktop) => {
+    if (isRandom) {
+        organizeWindows(desktop);
+    } else {
+        randomizeWindows(desktop);
+    }
+    isRandom = !isRandom;
 };
 
 leftArrow.addEventListener('click', () => scrollTabs(-1));
@@ -65,7 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
   updateTabsLayout();
 });
 
-
 tabs.forEach(tab => {
   tab.addEventListener('click', () => {
     tabs.forEach(t => t.classList.remove('active'));
@@ -77,6 +120,7 @@ tabs.forEach(tab => {
     if (targetDesktop) {
       tab.classList.add('active');
       targetDesktop.classList.add('active');
+      toggleWindowState(targetDesktop); // Переключаем расположение окон
     }
   });
 });
@@ -93,10 +137,12 @@ draggableElements.forEach(element => {
 
     currentZIndex++;
     element.style.zIndex = currentZIndex;
+    element.style.transition = 'none'; // Убираем анимацию при перетаскивании
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', () => {
       isDragging = false;
+      element.style.transition = ''; // Возвращаем анимацию после завершения перетаскивания
       document.removeEventListener('mousemove', onMouseMove);
     });
   });
@@ -139,7 +185,6 @@ window.addEventListener('resize', () => {
   });
   updateArrowState();
 });
-
 
 links.forEach(link => {
   let singleClickTimeout;
