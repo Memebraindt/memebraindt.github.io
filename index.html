@@ -14,7 +14,7 @@
         <div class="tab active" data-target="project1">
           <div class="tab-image-container">
             <img src="https://raw.githubusercontent.com/Memebraindt/memebraindt.github.io/refs/heads/main/Images/Preview-1.png" alt="Project 1 Preview" class="tab-preview">
-            <div class="tab-label">Ray-marching Fractals</div>
+            <div class="tab-label">Ray Marching Fractals</div>
           </div>
         </div>
         <div class="tab" data-target="project2">
@@ -64,6 +64,7 @@
     </div>
   </div>
   <div class="d-wrap">
+    <!-- Ray Marching Fractals -->
     <div class="desktop active" id="project1">
       <a class="icon draggable" href="https://github.com/Memebraindt" target="_blank" style="left: 50px; top: 50px;">
         <div class="icon-image">📂</div> <!--📁-->
@@ -75,23 +76,6 @@
       </div>
 
       <!-- Windows -->
-      <div class="window draggable" style="left: 560px; top: 60px; width: 480px; height: 340px;">
-        <div class="window-header">
-          <div class="header-buttons">
-            <span class="circle red"></span>
-            <span class="circle yellow"></span>
-            <span class="circle green"></span>
-          </div>
-          Ray-marching fractals
-        </div>
-        <div class="window-content">
-          Ray marching is a class of rendering methods for 3D computer graphics where rays are traversed iteratively, 
-          effectively dividing each ray into smaller ray segments, sampling some function at each step.
-          <br>Ray marching is also used in physics simulations as an alternative to ray tracing where analytic solutions of the trajectories of light or sound waves are solved. 
-          <br>Ray marching for computer graphics often takes advantage of SDFs to determine a maximum safe step-size, while this is less common in physics simulations a similar adaptive step method can be achieved using adaptive Runge-Kutta methods.
-        </div>
-      </div>
-
       <div class="window draggable" style="left: 240px; top: 60px; width: 300px; height: 340px;">
         <div class="window-header">
           <div class="header-buttons">
@@ -99,10 +83,27 @@
             <span class="circle yellow"></span>
             <span class="circle green"></span>
           </div>
-          GIF result
+          Result picture
         </div>
         <div class="window-content">
-          <img src="raw.githubusercontent.com/Memebraindt/memebraindt.github.io/refs/heads/main/Images/1_menger.png" alt="Result" style="width: 100%; border-radius: 5px;">
+          <img src="https://github.com/Memebraindt/memebraindt.github.io/blob/main/Images/1_menger.png" alt="Result" style="width: 100%; border-radius: 5px;">
+        </div>
+      </div>
+
+      <div class="window draggable" style="left: 560px; top: 60px; width: 480px; height: 340px;">
+        <div class="window-header">
+          <div class="header-buttons">
+            <span class="circle red"></span>
+            <span class="circle yellow"></span>
+            <span class="circle green"></span>
+          </div>
+          Description
+        </div>
+        <div class="window-content">
+          Ray marching is a class of rendering methods for 3D computer graphics where rays are traversed iteratively, 
+          effectively dividing each ray into smaller ray segments, sampling some function at each step.
+          <br>Ray marching is also used in physics simulations as an alternative to ray tracing where analytic solutions of the trajectories of light or sound waves are solved. 
+          <br>Ray marching for computer graphics often takes advantage of SDFs to determine a maximum safe step-size, while this is less common in physics simulations a similar adaptive step method can be achieved using adaptive Runge-Kutta methods.
         </div>
       </div>
 
@@ -113,14 +114,19 @@
             <span class="circle yellow"></span>
             <span class="circle green"></span>
           </div>
-          Picture
+          Code
         </div>
-        <div class="window-content">
-          <img src="https://via.placeholder.com/420x240" alt="Result" style="width: 100%; border-radius: 5px;">
+        <div class="window-content" style="background: #2c2c2c; color: white;">
+          <code>
+            for (let i = 0; i < maxSteps; i++) {
+              ray += direction * stepSize;
+              if (distance(ray) < threshold) break;
+            }
+          </code>
         </div>
       </div>
 
-      <div class="window draggable" style="left: 560px; top: 420px;">
+      <div class="window draggable" style="left: 560px; top: 420px; width: 300px; height: 340px;">
         <div class="window-header">
           <div class="header-buttons">
             <span class="circle red"></span>
@@ -129,9 +135,11 @@
           </div>
           Stack
         </div>
-        <div class="window-content">Python + GLSL <br>Pygame<br>ModernGL<br>Numba</div>
+        <div class="window-content">Python<br>GLSL<br>Pygame<br>ModernGL<br>Numba</div>
       </div>
     </div>
+
+    <!-- Matrix Vision -->
     <div class="desktop" id="project2">
       <!-- Icons -->
       <a class="icon draggable" href="https://github.com/Memebraindt" target="_blank" style="left: 50px; top: 50px;">
@@ -144,23 +152,6 @@
       </a>
       
       <!-- Windows -->
-      <div class="window draggable" style="left: 760px; top: 60px; width: 480px; height: 360px;">
-        <div class="window-header">
-          <div class="header-buttons">
-            <span class="circle red"></span>
-            <span class="circle yellow"></span>
-            <span class="circle green"></span>
-          </div>
-          Matrix Vision
-        </div>
-        <div class="window-content">
-          Python + GLSL<br>
-          Pygame<br>
-          ModernGL<br>
-          Numba<br>
-        </div>
-      </div>
-
       <div class="window draggable" style="left: 240px; top: 60px; width: 512px; height: 590px;">
         <div class="window-header">
           <div class="header-buttons">
@@ -175,22 +166,22 @@
         </div>
       </div>
 
-      <!-- <div class="window draggable" style="left: 240px; top: 434px; width: 600px; height: 385px;">
+      <div class="window draggable" style="left: 760px; top: 60px; width: 300px; height: 340px;">
         <div class="window-header">
           <div class="header-buttons">
             <span class="circle red"></span>
             <span class="circle yellow"></span>
             <span class="circle green"></span>
           </div>
-          RAW GIF
+          Matrix Vision
         </div>
-        <div class="window-content">
-          <img src="https://raw.githubusercontent.com/Memebraindt/memebraindt.github.io/refs/heads/main/Images/2_matrix.gif" alt="Result" style="width: 100%; border-radius: 5px;">
+        <div class="window-content">Python 3.8<br>NumPy<br>Pygame<br>
         </div>
-      </div> -->
+      </div>
 
     </div>
-
+    
+    <!-- 3 Body Problem -->
     <div class="desktop" id="project3">
       <div class="window draggable" style="left: 240px; top: 60px; width: 400px; height: 500px;">
         <div class="window-header">
@@ -206,8 +197,21 @@
         </div>
       </div>
 
+      <div class="window draggable" style="left: 760px; top: 60px; width: 300px; height: 340px;">
+        <div class="window-header">
+          <div class="header-buttons">
+            <span class="circle red"></span>
+            <span class="circle yellow"></span>
+            <span class="circle green"></span>
+          </div>
+          Stack
+        </div>
+        <div class="window-content">Matlab<br>diffur<br></div>
+      </div>
+
     </div>
 
+    <!-- TG Bot -->
     <div class="desktop" id="project4">
       <div class="window draggable" style="left: 240px; top: 60px; width: 500px; height: 430px;">
         <div class="window-header">
@@ -222,8 +226,21 @@
           <img src="https://raw.githubusercontent.com/Memebraindt/memebraindt.github.io/refs/heads/main/Images/4_telegram.png" alt="Result" style="width: 100%; border-radius: 5px;">
         </div>
       </div>
+
+      <div class="window draggable" style="left: 760px; top: 60px; width: 300px; height: 340px;">
+        <div class="window-header">
+          <div class="header-buttons">
+            <span class="circle red"></span>
+            <span class="circle yellow"></span>
+            <span class="circle green"></span>
+          </div>
+          Stack
+        </div>
+        <div class="window-content">Python 3.8<br>AsincIO<br>Aiogram<br></div>
+      </div>
     </div>
 
+    <!-- Go Game -->
     <div class="desktop" id="project5">
       <div class="window draggable" style="left: 240px; top: 60px; width: 512px; height: 550px;">
         <div class="window-header">
@@ -238,8 +255,23 @@
           <img src="https://raw.githubusercontent.com/Memebraindt/memebraindt.github.io/refs/heads/main/Images/5_go.png" alt="Result" style="width: 100%; border-radius: 5px;">
         </div>
       </div>
+
+      <div class="window draggable" style="left: 760px; top: 60px; width: 300px; height: 340px;">
+        <div class="window-header">
+          <div class="header-buttons">
+            <span class="circle red"></span>
+            <span class="circle yellow"></span>
+            <span class="circle green"></span>
+          </div>
+          Stack
+        </div>
+        <div class="window-content">Python 3.12<br>Pygame<br>
+        </div>
+      </div>
+
     </div>
 
+    <!-- Sudoku -->
     <div class="desktop" id="project6">
       <div class="window draggable" style="left: 240px; top: 60px; width: 512px; height: 560px;">
         <div class="window-header">
@@ -254,8 +286,23 @@
           <img src="https://raw.githubusercontent.com/Memebraindt/memebraindt.github.io/refs/heads/main/Images/6_sudoku.png" alt="Result" style="width: 100%; border-radius: 5px;">
         </div>
       </div>
+
+      <div class="window draggable" style="left: 760px; top: 60px; width: 300px; height: 340px;">
+        <div class="window-header">
+          <div class="header-buttons">
+            <span class="circle red"></span>
+            <span class="circle yellow"></span>
+            <span class="circle green"></span>
+          </div>
+          Stack
+        </div>
+        <div class="window-content">С++<br>SDL2<br>
+        </div>
+      </div>
+
     </div>
 
+    <!-- Flappy Birds -->
     <div class="desktop" id="project7">
       <div class="window draggable" style="left: 240px; top: 60px; width: 300px; height: 340px;">
         <div class="window-header">
@@ -270,8 +317,21 @@
           <img src="https://raw.githubusercontent.com/Memebraindt/memebraindt.github.io/refs/heads/main/Images/7_birds.png" alt="Result" style="width: 100%; border-radius: 5px;">
         </div>
       </div>
+
+      <div class="window draggable" style="left: 560px; top: 420px; width: 300px; height: 340px;">
+        <div class="window-header">
+          <div class="header-buttons">
+            <span class="circle red"></span>
+            <span class="circle yellow"></span>
+            <span class="circle green"></span>
+          </div>
+          Stack
+        </div>
+        <div class="window-content">Python<br>Pygame<br>Neat</div>
+      </div>
     </div>
 
+    <!-- Portfolio -->
     <div class="desktop" id="project8">
       <div class="window draggable" style="left: 184px; top: 60px; width: 576px; height: 420px;">
         <div class="window-header">
@@ -300,6 +360,19 @@
           <img src="https://raw.githubusercontent.com/Memebraindt/memebraindt.github.io/refs/heads/main/Images/After-1.png" alt="Result" style="width: 100%; border-radius: 5px;">
         </div>
       </div>
+
+      <div class="window draggable" style="left: 560px; top: 420px; width: 300px; height: 340px;">
+        <div class="window-header">
+          <div class="header-buttons">
+            <span class="circle red"></span>
+            <span class="circle yellow"></span>
+            <span class="circle green"></span>
+          </div>
+          Stack
+        </div>
+        <div class="window-content">HTML5<br>CSS3<br>JS</div>
+      </div>
+      
     </div>
   </div>
   <script src="script.js"></script>
