@@ -11,7 +11,13 @@ const links = document.querySelectorAll('a');
 
 let currentZIndex = 10; 
 let scrollPosition = 0;
-let isRandom = false; // Состояние: false - упорядоченное, true - случайное
+const tabStates = {}; // Состояния для каждой вкладки (false - упорядоченное, true - случайное)
+
+// Инициализация состояния всех вкладок
+tabs.forEach(tab => {
+  const targetId = tab.getAttribute('data-target');
+  tabStates[targetId] = false; // По умолчанию все вкладки упорядочены
+});
 
 const updateArrowState = () => {
   const tabsWrapperWidth = tabsWrapper.offsetWidth;
@@ -71,15 +77,23 @@ const organizeWindows = (desktop) => {
     const windows = desktop.querySelectorAll('.window');
     let x = 20;
     let y = 20;
-    const padding = 20; // Отступ между окнами
+    const padding = 10; // Отступ между окнами
 
     windows.forEach((window) => {
         const windowWidth = window.offsetWidth;
         const windowHeight = window.offsetHeight;
 
-        window.style.transition = 'all 1.5s ease';
-        window.style.left = `${x}px`;
-        window.style.top = `${y}px`;
+        // Проверяем текущее положение и только затем обновляем
+        const currentLeft = parseInt(window.style.left || 0, 10);
+        const currentTop = parseInt(window.style.top || 0, 10);
+
+        if (currentLeft !== x || currentTop !== y) {
+            window.style.transition = 'all 1.5s ease';
+            window.style.left = `${x}px`;
+            window.style.top = `${y}px`;
+        } else {
+            window.style.transition = 'none'; // Избегаем дёргания
+        }
 
         x += windowWidth + padding;
         if (x + windowWidth > desktop.offsetWidth) {
@@ -89,13 +103,13 @@ const organizeWindows = (desktop) => {
     });
 };
 
-const toggleWindowState = (desktop) => {
-    if (isRandom) {
+const toggleWindowState = (desktop, tabId) => {
+    if (tabStates[tabId]) {
         organizeWindows(desktop);
     } else {
         randomizeWindows(desktop);
     }
-    isRandom = !isRandom;
+    tabStates[tabId] = !tabStates[tabId];
 };
 
 leftArrow.addEventListener('click', () => scrollTabs(-1));
@@ -107,6 +121,7 @@ window.addEventListener('resize', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
   updateTabsLayout();
+  desktops.forEach(desktop => organizeWindows(desktop)); // Изначально все окна упорядочены
 });
 
 tabs.forEach(tab => {
@@ -120,8 +135,18 @@ tabs.forEach(tab => {
     if (targetDesktop) {
       tab.classList.add('active');
       targetDesktop.classList.add('active');
-      toggleWindowState(targetDesktop); // Переключаем расположение окон
+
+      // Переключение состояния только при повторном клике на активную вкладку
+      if (tab.classList.contains('clicked')) {
+        toggleWindowState(targetDesktop, targetId);
+      }
+      tab.classList.add('clicked');
     }
+
+    // Убираем метку "clicked" со всех остальных вкладок
+    tabs.forEach(t => {
+      if (t !== tab) t.classList.remove('clicked');
+    });
   });
 });
 
