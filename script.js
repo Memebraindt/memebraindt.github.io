@@ -16,7 +16,7 @@ const tabStates = {}; // Состояния для каждой вкладки (
 // Инициализация состояния всех вкладок
 tabs.forEach(tab => {
   const targetId = tab.getAttribute('data-target');
-  tabStates[targetId] = false; // По умолчанию все вкладки упорядочены
+  tabStates[targetId] = true; // По умолчанию все вкладки упорядочены
 });
 
 const updateArrowState = () => {
@@ -74,34 +74,64 @@ const randomizeWindows = (desktop) => {
 };
 
 const organizeWindows = (desktop) => {
-    const windows = desktop.querySelectorAll('.window');
-    let x = 20;
-    let y = 20;
-    const padding = 10; // Отступ между окнами
+  const windows = desktop.querySelectorAll('.window');
+  const desktopWidth = desktop.offsetWidth;
+  
+  const padding = 10; // Отступ между окнами
+  let rowY = 20;
+  let maxHeightInRow = 0;
+  let rowWindows = [];
+  let rowWidth = 0;
 
-    windows.forEach((window) => {
-        const windowWidth = window.offsetWidth;
-        const windowHeight = window.offsetHeight;
+  if (windows.length === 0) return; // Если окон нет, ничего не делаем
 
-        // Проверяем текущее положение и только затем обновляем
-        const currentLeft = parseInt(window.style.left || 0, 10);
-        const currentTop = parseInt(window.style.top || 0, 10);
+  windows.forEach((window) => {
+      const windowWidth = window.offsetWidth;
+      const windowHeight = window.offsetHeight;
+      
+      if (rowWidth + windowWidth + padding > desktopWidth - 40) {
+          // Центрируем текущий ряд
+          let offsetX = (desktopWidth - rowWidth) / 2;
+          rowWindows.forEach((win) => {
+              win.style.transition = 'all 1.5s ease';
+              win.style.left = `${offsetX}px`;
+              win.style.top = `${rowY}px`;
+              offsetX += win.offsetWidth + padding;
+          });
+          
+          // Переход на следующую строку
+          rowWindows = [];
+          rowWidth = 0;
+          rowY += maxHeightInRow + padding;
+          maxHeightInRow = 0;
+      }
+      
+      rowWindows.push(window);
+      rowWidth += windowWidth + padding;
+      maxHeightInRow = Math.max(maxHeightInRow, windowHeight);
+  });
 
-        if (currentLeft !== x || currentTop !== y) {
-            window.style.transition = 'all 1.5s ease';
-            window.style.left = `${x}px`;
-            window.style.top = `${y}px`;
-        } else {
-            window.style.transition = 'none'; // Избегаем дёргания
-        }
-
-        x += windowWidth + padding;
-        if (x + windowWidth > desktop.offsetWidth) {
-            x = 20;
-            y += windowHeight + padding;
-        }
-    });
+  // Центрируем последний ряд
+  let offsetX = (desktopWidth - rowWidth) / 2;
+  rowWindows.forEach((win) => {
+      win.style.transition = 'all 1.5s ease';
+      win.style.left = `${offsetX}px`;
+      win.style.top = `${rowY}px`;
+      offsetX += win.offsetWidth + padding;
+  });
 };
+
+window.addEventListener('resize', () => {
+  document.querySelectorAll('.desktop').forEach(desktop => {
+      organizeWindows(desktop);
+  });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.desktop').forEach(desktop => {
+      organizeWindows(desktop);
+  });
+});
 
 const toggleWindowState = (desktop, tabId) => {
     if (tabStates[tabId]) {
@@ -122,6 +152,17 @@ window.addEventListener('resize', () => {
 document.addEventListener('DOMContentLoaded', () => {
   updateTabsLayout();
   desktops.forEach(desktop => organizeWindows(desktop)); // Изначально все окна упорядочены
+});
+
+// Добавляем обработчик переключения вкладок
+tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        const targetId = tab.getAttribute('data-target');
+        const targetDesktop = document.getElementById(targetId);
+        if (targetDesktop) {
+            organizeWindows(targetDesktop);
+        }
+    });
 });
 
 tabs.forEach(tab => {
